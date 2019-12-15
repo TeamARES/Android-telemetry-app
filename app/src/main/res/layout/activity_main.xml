@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/live_view"
+        android:layout_width="match_parent"
+        android:layout_height="254dp">
+
+        <SurfaceView
+            android:id="@+id/surface"
+            android:layout_width="match_parent"
+            android:layout_height="254dp"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/live_view"
+        android:paddingTop="30dp">
+
+        <ImageButton
+            android:id="@+id/arrow_up"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/arrow_up" />
+
+        <LinearLayout
+            android:id="@+id/layout_centre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/arrow_up"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageButton
+                android:id="@+id/arrow_left"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginRight="54dp"
+                android:src="@drawable/arrow_left" />
+
+            <ImageButton
+                android:id="@+id/arrow_right"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="54dp"
+                android:src="@drawable/arrow_right" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/arrow_down"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/layout_centre"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/arrow_down" />
+    </RelativeLayout>
+</RelativeLayout>
