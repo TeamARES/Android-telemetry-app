@@ -22,10 +22,7 @@ import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.net.Socket;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements IVLCVout.Callback {
@@ -39,9 +36,8 @@ public class MainActivity extends AppCompatActivity implements IVLCVout.Callback
     private MediaPlayer mediaPlayer = null;
     private int mVideoWidth;
     private int mVideoHeight;
-    private Socket socket;
-    private DataOutputStream dOut;
     private String ipAdd;
+    private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,33 +70,35 @@ public class MainActivity extends AppCompatActivity implements IVLCVout.Callback
     }
 
     private void setUp() {
-        OpenConnection();
+
+        client = new Client(ipAdd);
+        client.OpenConnection();
 
         up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ButtonClick("Up");
+                client.UpDownClick(1);
             }
         });
 
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ButtonClick("Left");
+                client.LeftRightClick(1);
             }
         });
 
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ButtonClick("Right");
+                client.LeftRightClick(-1);
             }
         });
 
         down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ButtonClick("Down");
+                client.UpDownClick(-1);
             }
         });
 
@@ -121,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements IVLCVout.Callback
     protected void onDestroy() {
         super.onDestroy();
         releasePlayer();
-        CloseConnection();
+        client.CloseConnection();
     }
 
     private void setSize(int width, int height) {
@@ -257,49 +255,4 @@ public class MainActivity extends AppCompatActivity implements IVLCVout.Callback
         Toast.makeText(this, "Error with hardware acceleration", Toast.LENGTH_LONG).show();
     }
 
-    private void OpenConnection() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    socket = new Socket(ipAdd, 8080);
-                    dOut = new DataOutputStream(socket.getOutputStream());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-    }
-
-    private void CloseConnection() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    dOut.writeUTF("over");
-
-                    dOut.close();
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-    }
-
-    private void ButtonClick(final String button) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    dOut.writeUTF(button);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-    }
 }
